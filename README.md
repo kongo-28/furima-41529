@@ -7,8 +7,10 @@
 | nickname           | string | null: false |
 | email              | string | null: false, unique: true |
 | encrypted_password | string | null: false |
-| name               | string | null: false |
-| name_kana          | string | null: false |
+| first_name                | string | null: false |
+| family_name               | string | null: false |
+| first_name_kana           | string | null: false |
+| family_name_kana          | string | null: false |
 | birthday           | date   | null: false |
 
 ### Association
@@ -18,18 +20,17 @@
 
 ## items テーブル
 
-| Column      | Type    | Options     |
-| ------      | ------  | ----------- |
-| name        | string  | null: false |
-| image       | string  | null: false |
-| explanation | string  | null: false |
-| category    | string  | null: false |
-| condition   | string  | null: false |
-| fee         | string  | null: false |
-| region      | string  | null: false |
-| period      | string  | null: false |
-| price       | integer | null: false |
-| user        | references | null: false, foreign_key: true|
+| Column         | Type    | Options     |
+| -------------- | ------- | ----------- |
+| name           | string  | null: false |
+| explanation    | text    | null: false |
+| category_id    | integer | null: false |
+| condition_id   | integer | null: false |
+| fee_id         | integer | null: false |
+| region_id      | integer | null: false |
+| period_id      | integer | null: false |
+| price          | integer | null: false |
+| user           | references | null: false, foreign_key: true|
 
 ### Association
 
@@ -46,15 +47,16 @@
 
 ### Association
 
-- belongs_to :room
+- belongs_to :item
 - belongs_to :user
+- has_one :address
 
 ## addresses テーブル
 
 | Column         | Type       | Options                        |
 | -------        | ---------- | ------------------------------ |
 | post_code      | string     | null: false |
-| prefecture     | string     | null: false |
+| prefecture_id  | integer    | null: false |
 | municipality   | string     | null: false |
 | street_address | string     | null: false |
 | building       | string     |             |
