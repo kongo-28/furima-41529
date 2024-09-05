@@ -5,6 +5,7 @@ class Item < ApplicationRecord
   belongs_to :fee
   belongs_to :prefecture
   belongs_to :period
+  has_one_attached :image
 
   validates :name,          presence: true
   validates :explanation,   presence: true
