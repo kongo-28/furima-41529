@@ -17,4 +17,5 @@ class Item < ApplicationRecord
   validates :period_id,     numericality: { other_than: 1 , message: "can't be blank"}
   validates :price,         presence: true ,numericality: { only_integer: true ,greater_than: 299,less_than: 10000000}
 
+  belongs_to :user
 end
