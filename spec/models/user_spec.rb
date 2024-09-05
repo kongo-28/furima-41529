@@ -84,6 +84,27 @@ RSpec.describe User, type: :model do
         expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
       end
 
+      it 'passwordが英字のみでは登録できない' do
+        @user.password = 'aaaaaa'
+        @user.password_confirmation = @user.password
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password は半角英数を両方含む必要があります')
+      end
+
+      it 'passwordが数字のみでは登録できない' do
+        @user.password = 111_111
+        @user.password_confirmation = @user.password
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password は半角英数を両方含む必要があります')
+      end
+
+      it 'passwordが全角では登録できない' do
+        @user.password = 'ＡＡＡＡＡＡ'
+        @user.password_confirmation = @user.password
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password は半角英数を両方含む必要があります')
+      end
+
       it '重複したemailが存在する場合は登録できない' do
         @user.save
         another_user = FactoryBot.build(:user, email: @user.email)
@@ -109,16 +130,16 @@ RSpec.describe User, type: :model do
         expect(@user.errors.full_messages).to include('Family name 全角文字を使用してください')
       end
 
-      it 'first_name_kanaが半角文字では登録できない' do
-        @user.first_name_kana = 'aa'
+      it 'first_name_kanaに全角カタカナ以外が含まれていると登録できない' do
+        @user.first_name_kana = 'aaa'
         @user.valid?
-        expect(@user.errors.full_messages).to include('First name kana 全角文字を使用してください')
+        expect(@user.errors.full_messages).to include('First name kana 全角カタカナを使用してください')
       end
 
-      it 'family_name_kanaが半角文字では登録できない' do
+      it 'family_name_kana全角カタカナ以外が含まれていると登録できない' do
         @user.family_name_kana = 'aa'
         @user.valid?
-        expect(@user.errors.full_messages).to include('Family name kana 全角文字を使用してください')
+        expect(@user.errors.full_messages).to include('Family name kana 全角カタカナを使用してください')
       end
     end
   end
