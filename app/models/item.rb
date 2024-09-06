@@ -7,7 +7,7 @@ class Item < ApplicationRecord
   belongs_to :period
   has_one_attached :image
   belongs_to :user
-  
+
   validates :image,         presence: true
   validates :name,          presence: true
   validates :explanation,   presence: true
@@ -18,5 +18,4 @@ class Item < ApplicationRecord
   validates :period_id,     numericality: { other_than: 1, message: "can't be blank" }
   validates :price,         presence: true, numericality: { only_integer: true },
                             numericality: { greater_than: 299, less_than: 10_000_000 }
-
 end
