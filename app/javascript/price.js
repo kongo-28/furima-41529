@@ -6,7 +6,7 @@ function price (){
   const profit = document.getElementById("profit");
 
   // 数字を入力した際の挙動
-  itemPrice.addEventListener('keyup', function(){
+  itemPrice.addEventListener('input', function(){
     const taxCalc = `${Math.floor(itemPrice.value*0.1)}`;
     tax.innerHTML = `${taxCalc}`;
     profit.innerHTML = `${itemPrice.value - taxCalc}`;
@@ -14,3 +14,4 @@ function price (){
 };
 
 window.addEventListener('turbo:load', price);
+window.addEventListener("turbo:render", price);
