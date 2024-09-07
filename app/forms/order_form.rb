@@ -8,11 +8,11 @@ class OrderForm
                 :order_id, :item_id, :user_id
 
   # バリデーション
-  validates :post_code,      presence: true
+  validates :post_code,      presence: true, format: { with: /\A\d{3}[-]\d{4}\z/, message: 'xxx-xxxxの形式で入力してください' }
   validates :prefecture_id,  numericality: { other_than: 1, message: "can't be blank" }
   validates :municipality,   presence: true
   validates :street_address, presence: true
-  validates :phone_number,   presence: true
+  validates :phone_number,   presence: true, format: { with: /\A\d{10,11}\z/, message: '10桁か11桁の半角数値で入力してください' }
 
   def save
     # バリデーション実行
