@@ -3,6 +3,7 @@ class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :user_check, only: [:edit, :destroy]
   before_action :sold_judge, only: [:show]
+
   def index
     @items = Item.includes(:order).order('created_at DESC')
     @item_count = Item.count
