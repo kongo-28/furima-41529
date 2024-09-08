@@ -5,7 +5,7 @@ class OrderForm
   # ゲッターとセッターを定義
   attr_accessor :post_code, :prefecture_id, :municipality, 
                 :street_address, :building, :phone_number,
-                :order_id, :item_id, :user_id
+                :order_id, :item_id, :user_id, :token
 
   # バリデーション
   validates :post_code,      presence: true, format: { with: /\A\d{3}[-]\d{4}\z/, message: 'xxx-xxxxの形式で入力してください' }
