@@ -9,15 +9,8 @@ class OrdersController < ApplicationController
   def create
     @order = OrderForm.new(order_params)
     @item = Item.find(params[:item_id])
-    binding.pry
     if @order.valid?
-      Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
-      Payjp::Charge.create(
-        amount: @item.price,
-        card: order_params[:token],
-        currency: 'jpy'
-      )
-      
+      pay_item
       @order.save
       return redirect_to root_path
     else
@@ -36,4 +29,14 @@ class OrdersController < ApplicationController
       token: params[:token]
     )
   end
+
+  def pay_item
+    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+    Payjp::Charge.create(
+      amount: @item.price,
+      card: order_params[:token],
+      currency: 'jpy'
+    )
+  end
+
 end
