@@ -9,8 +9,17 @@ class OrdersController < ApplicationController
   def create
     @order = OrderForm.new(order_params)
     @item = Item.find(params[:item_id])
-    if @order.save
-      redirect_to root_path
+    binding.pry
+    if @order.valid?
+      Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+      Payjp::Charge.create(
+        amount: @item.price,
+        card: order_params[:token],
+        currency: 'jpy'
+      )
+      
+      @order.save
+      return redirect_to root_path
     else
       render :index, status: :unprocessable_entity
     end
