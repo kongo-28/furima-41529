@@ -2,9 +2,10 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :edit, :destroy]
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :user_check, only: [:edit, :destroy]
+  before_action :sold_judge, only: [:show, :edit]
 
   def index
-    @items = Item.all.order('created_at DESC')
+    @items = Item.includes(:order).order('created_at DESC')
     @item_count = Item.count
   end
 
@@ -55,8 +56,12 @@ class ItemsController < ApplicationController
   end
 
   def user_check
-    if @item.user != current_user
-      redirect_to root_path
-    end
+    redirect_to root_path if @item.user != current_user
+  end
+
+  def sold_judge
+    return if @item.order.nil?
+
+    redirect_to root_path
   end
 end

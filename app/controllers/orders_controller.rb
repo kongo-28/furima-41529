@@ -1,0 +1,58 @@
+class OrdersController < ApplicationController
+  before_action :authenticate_user!, only: [:index, :create]
+  before_action :set_item, only: [:index, :create]
+  before_action :sold_judge, only: [:index]
+  before_action :user_check, only: [:index]
+
+  def index
+    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
+    @order = OrderForm.new
+  end
+
+  def create
+    @order = OrderForm.new(order_params)
+    if @order.valid?
+      pay_item
+      @order.save
+      redirect_to root_path
+    else
+      render :index, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def order_params
+    params.require(:order_form).permit(
+      :post_code, :prefecture_id, :municipality,
+      :street_address, :building, :phone_number
+    ).merge(
+      user_id: current_user.id, item_id: params[:item_id],
+      token: params[:token]
+    )
+  end
+
+  def pay_item
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
+    Payjp::Charge.create(
+      amount: @item.price,
+      card: order_params[:token],
+      currency: 'jpy'
+    )
+  end
+
+  def sold_judge
+    return if @item.order.nil?
+    redirect_to root_path
+  end
+
+  def user_check
+    return unless @item.user == current_user
+    redirect_to root_path
+  end
+
+  def set_item
+    @item = Item.find(params[:item_id])
+  end
+
+end
