@@ -27,8 +27,14 @@ const pay = () => {
         const renderDom = document.getElementById("charge-form");
         const tokenObj = `<input value=${token} name='token' type="hidden">`;
         renderDom.insertAdjacentHTML("beforeend", tokenObj);
-        debugger;
       }
+
+      // カードの情報を取り除く
+      numberElement.clear();
+      expiryElement.clear();
+      cvcElement.clear();
+      // カードの情報を取り除く
+
     });
     e.preventDefault();
   });
