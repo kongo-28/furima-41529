@@ -1,18 +1,16 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!, only: [:index, :create]
-  before_action :set_item, only: [:index]
+  before_action :set_item, only: [:index, :create]
   before_action :sold_judge, only: [:index]
   before_action :user_check, only: [:index]
 
   def index
     gon.public_key = ENV['PAYJP_PUBLIC_KEY']
     @order = OrderForm.new
-    @item = Item.find(params[:item_id])
   end
 
   def create
     @order = OrderForm.new(order_params)
-    @item = Item.find(params[:item_id])
     if @order.valid?
       pay_item
       @order.save
