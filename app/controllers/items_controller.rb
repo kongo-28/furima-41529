@@ -56,16 +56,12 @@ class ItemsController < ApplicationController
   end
 
   def user_check
-    if @item.user != current_user
-      redirect_to root_path
-    end
+    redirect_to root_path if @item.user != current_user
   end
 
   def sold_judge
-    if 
-      @item.order != nil
-      redirect_to root_path
-    end
-  end
+    return if @item.order.nil?
 
+    redirect_to root_path
+  end
 end

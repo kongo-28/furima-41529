@@ -4,7 +4,7 @@ class OrdersController < ApplicationController
   before_action :user_check, only: [:index]
 
   def index
-    gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
+    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
     @order = OrderForm.new
     @item = Item.find(params[:item_id])
   end
@@ -15,7 +15,7 @@ class OrdersController < ApplicationController
     if @order.valid?
       pay_item
       @order.save
-      return redirect_to root_path
+      redirect_to root_path
     else
       render :index, status: :unprocessable_entity
     end
@@ -25,8 +25,8 @@ class OrdersController < ApplicationController
 
   def order_params
     params.require(:order_form).permit(
-      :post_code, :prefecture_id, :municipality, 
-      :street_address, :building, :phone_number,
+      :post_code, :prefecture_id, :municipality,
+      :street_address, :building, :phone_number
     ).merge(
       user_id: current_user.id, item_id: params[:item_id],
       token: params[:token]
@@ -34,7 +34,7 @@ class OrdersController < ApplicationController
   end
 
   def pay_item
-    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
     Payjp::Charge.create(
       amount: @item.price,
       card: order_params[:token],
@@ -44,16 +44,15 @@ class OrdersController < ApplicationController
 
   def sold_judge
     @item = Item.find(params[:item_id])
-    if @item.order != nil
-      redirect_to root_path
-    end
+    return if @item.order.nil?
+
+    redirect_to root_path
   end
 
   def user_check
     @item = Item.find(params[:item_id])
-    if @item.user == current_user
-      redirect_to root_path
-    end
+    return unless @item.user == current_user
+
+    redirect_to root_path
   end
-  
 end
