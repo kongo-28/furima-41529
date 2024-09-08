@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!, only: [:index, :create]
+  before_action :set_item, only: [:index]
   before_action :sold_judge, only: [:index]
   before_action :user_check, only: [:index]
 
@@ -43,16 +44,17 @@ class OrdersController < ApplicationController
   end
 
   def sold_judge
-    @item = Item.find(params[:item_id])
     return if @item.order.nil?
-
     redirect_to root_path
   end
 
   def user_check
-    @item = Item.find(params[:item_id])
     return unless @item.user == current_user
-
     redirect_to root_path
   end
+
+  def set_item
+    @item = Item.find(params[:item_id])
+  end
+
 end
