@@ -1,6 +1,8 @@
 const pay = () => {
-  const publicKey = gon.public_key // PAY.JPテスト公開鍵 
-  const payjp = Payjp(publicKey)
+  console.log("payが呼び出された")
+
+  const publicKey = gon.public_key 
+  const payjp = Payjp(publicKey)   // PAY.JPテスト公開鍵 
 
   // HTML要素をフォームと置き換え
   const elements = payjp.elements();
@@ -14,10 +16,16 @@ const pay = () => {
   // HTML要素をフォームと置き換え
 
 
-  const form = document.getElementById('button')
-  form.addEventListener("click", (e) => {
-    console.log("フォーム送信時にイベント発火")
-    // e.preventDefault();
+  const form = document.getElementById('charge-form')
+  form.addEventListener("submit", (e) => {
+    payjp.createToken(numberElement).then(function (response) {
+      if (response.error) {
+      } else {
+        const token = response.id;
+        console.log(token)
+      }
+    });
+    e.preventDefault();
   });
 };
 
