@@ -13,6 +13,7 @@ class OrderForm
   validates :municipality,   presence: true
   validates :street_address, presence: true
   validates :phone_number,   presence: true, format: { with: /\A\d{10,11}\z/, message: '10桁か11桁の半角数値で入力してください' }
+  validates :token,          presence: true
 
   def save
     # バリデーション実行
