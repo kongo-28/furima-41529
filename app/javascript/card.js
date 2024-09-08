@@ -34,6 +34,8 @@ const pay = () => {
       expiryElement.clear();
       cvcElement.clear();
       // カードの情報を取り除く
+      // フォームの情報を送信
+      document.getElementById("charge-form").submit();
 
     });
     e.preventDefault();
