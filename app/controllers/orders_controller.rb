@@ -3,9 +3,9 @@ class OrdersController < ApplicationController
   before_action :set_item, only: [:index, :create]
   before_action :sold_judge, only: [:index]
   before_action :user_check, only: [:index]
+  before_action :set_public_key, only: [:index, :create]
 
   def index
-    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
     @order = OrderForm.new
   end
 
@@ -53,6 +53,10 @@ class OrdersController < ApplicationController
 
   def set_item
     @item = Item.find(params[:item_id])
+  end
+
+  def set_public_key
+    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
   end
 
 end
